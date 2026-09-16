@@ -29,7 +29,7 @@ export default function GiveawaysBrowser() {
       .order('posted_at', { ascending: false })
 
     if (area) query = query.eq('area', area)
-    if (category) query = query.eq('category', category)
+    if (category) query = query.overlaps('categories', [category])
 
     const { data } = await query
     setListings(data || [])

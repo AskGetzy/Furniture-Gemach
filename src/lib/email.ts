@@ -1,6 +1,10 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let _resend: Resend | null = null
+function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY)
+  return _resend
+}
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'getzyw89@gmail.com'
 const FROM = 'Furniture Gemach <noreply@furnituregemach.com>'
@@ -14,7 +18,7 @@ export async function sendListingConfirmation(params: {
   expiresAt: string
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: params.to,
     subject: 'Your Furniture Gemach listing is live!',
@@ -42,7 +46,7 @@ export async function sendAdminNewListingNotification(params: {
   area: string
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAIL,
     subject: `New listing posted: ${params.listingTitle}`,
@@ -65,7 +69,7 @@ export async function sendExpirationNotice(params: {
   type: string
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: params.to,
     subject: `Your Furniture Gemach listing has expired`,
@@ -83,12 +87,41 @@ export async function sendExpirationNotice(params: {
   })
 }
 
+export async function sendAvailabilityCheck(params: {
+  to: string
+  posterName: string
+  listingTitle: string
+  listingId: string
+  pinCode: string
+}) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  await getResend().emails.send({
+    from: FROM,
+    to: params.to,
+    subject: `Is your item still available? — ${params.listingTitle}`,
+    html: `
+      <h2>Is your item still available?</h2>
+      <p>Hi ${params.posterName},</p>
+      <p>Your listing "<strong>${params.listingTitle}</strong>" is still active on Furniture Gemach.</p>
+      <p>If the item has already been given away or sold, please take the listing down so others know it's gone.</p>
+      <p>
+        <a href="${appUrl}/manage?pin=${params.pinCode}" style="background:#059669;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:8px 0;">
+          Manage my listing
+        </a>
+      </p>
+      <p>If it's still available — great! No action needed.</p>
+      <hr />
+      <p><em>Thank you for keeping the community updated!</em></p>
+    `,
+  })
+}
+
 export async function sendContactEmail(params: {
   name: string
   email: string
   message: string
 }) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: ADMIN_EMAIL,
     replyTo: params.email,

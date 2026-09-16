@@ -77,7 +77,7 @@ export default function ListingCard({ listing, showContact = false }: Props) {
           <MapPin size={11} />
           <span>{listing.area}</span>
           <span className="mx-1">·</span>
-          <span>{CATEGORY_LABELS[listing.category]}</span>
+          <span>{(listing.categories?.length ? listing.categories : [listing.category]).map(c => CATEGORY_LABELS[c]).join(', ')}</span>
         </div>
 
         <p className="text-xs text-gray-600 line-clamp-2 mb-3 flex-1">{listing.description}</p>

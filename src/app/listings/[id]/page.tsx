@@ -73,9 +73,11 @@ export default async function ListingPage({ params }: Props) {
                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold text-white ${isGiveaway ? 'bg-emerald-500' : 'bg-blue-500'}`}>
                   {isGiveaway ? 'FREE — Giveaway' : 'For Sale'}
                 </span>
-                <span className="text-xs text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
-                  {CATEGORY_LABELS[listing.category as ListingCategory]}
-                </span>
+                {(listing.categories?.length ? listing.categories : [listing.category as ListingCategory]).map((c: ListingCategory) => (
+                  <span key={c} className="text-xs text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
+                    {CATEGORY_LABELS[c]}
+                  </span>
+                ))}
                 <span className="text-xs text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
                   {listing.area}
                 </span>

@@ -27,7 +27,7 @@ export default function SalesBrowser() {
       .eq('status', 'active')
 
     if (area) query = query.eq('area', area)
-    if (category) query = query.eq('category', category)
+    if (category) query = query.overlaps('categories', [category])
 
     const sortMap: Record<SortOption, { col: string; asc: boolean }> = {
       price_asc: { col: 'price', asc: true },

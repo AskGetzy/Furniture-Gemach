@@ -6,9 +6,10 @@ export const metadata = { title: 'Listing Live! — Furniture Gemach' }
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ listing_id?: string }>
+  searchParams: Promise<{ listing_id?: string; free?: string }>
 }) {
-  const { listing_id } = await searchParams
+  const { listing_id, free } = await searchParams
+  const isFree = free === '1'
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -16,7 +17,9 @@ export default async function SuccessPage({
         <CheckCircle className="mx-auto mb-4 text-emerald-500" size={52} />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Your listing is live!</h1>
         <p className="text-gray-600 text-sm mb-4">
-          Payment successful. Your listing is now active and visible to the community.
+          {isFree
+            ? 'Your listing is now active and visible to the community.'
+            : 'Payment successful. Your listing is now active and visible to the community.'}
         </p>
         <p className="text-gray-500 text-sm mb-6">
           We've sent a confirmation email with your <strong>PIN code</strong> — save it to manage or remove your listing early.

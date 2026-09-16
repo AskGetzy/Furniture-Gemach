@@ -7,7 +7,8 @@ export interface Listing {
   id: string
   type: ListingType
   area: ListingArea
-  category: ListingCategory
+  category: ListingCategory  // legacy, kept for DB compat
+  categories: ListingCategory[]
   title: string
   description: string
   price: number | null

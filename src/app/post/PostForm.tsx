@@ -1,15 +1,25 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Camera, X, AlertCircle, ChevronRight } from 'lucide-react'
 import { AREAS, CATEGORIES } from '@/lib/supabase/types'
 import type { ListingArea, ListingCategory, ListingType } from '@/lib/supabase/types'
 import { createClient } from '@/lib/supabase/client'
 
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (el: HTMLElement, opts: Record<string, unknown>) => string
+      reset: (id: string) => void
+    }
+  }
+}
+
 interface FormData {
   type: ListingType
   area: ListingArea | ''
-  category: ListingCategory | ''
+  categories: ListingCategory[]
   title: string
   description: string
   price: string
@@ -22,7 +32,7 @@ interface FormData {
 const INITIAL: FormData = {
   type: 'giveaway',
   area: '',
-  category: '',
+  categories: [],
   title: '',
   description: '',
   price: '',
@@ -32,7 +42,13 @@ const INITIAL: FormData = {
   poster_address: '',
 }
 
-export default function PostForm() {
+interface Props {
+  giveawayFee: number
+  saleFee: number
+}
+
+export default function PostForm({ giveawayFee, saleFee }: Props) {
+  const router = useRouter()
   const [form, setForm] = useState<FormData>(INITIAL)
   const [photos, setPhotos] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
@@ -40,10 +56,41 @@ export default function PostForm() {
   const [step, setStep] = useState<'form' | 'submitting' | 'error'>('form')
   const [submitError, setSubmitError] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+  const turnstileRef = useRef<HTMLDivElement>(null)
+  const turnstileIdRef = useRef<string | null>(null)
+  const turnstileTokenRef = useRef<string>('')
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
+  useEffect(() => {
+    if (!siteKey || !turnstileRef.current) return
+    const script = document.createElement('script')
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+    script.async = true
+    script.onload = () => {
+      if (window.turnstile && turnstileRef.current) {
+        turnstileIdRef.current = window.turnstile.render(turnstileRef.current, {
+          sitekey: siteKey,
+          callback: (token: string) => { turnstileTokenRef.current = token },
+          'expired-callback': () => { turnstileTokenRef.current = '' },
+        })
+      }
+    }
+    document.head.appendChild(script)
+    return () => { document.head.removeChild(script) }
+  }, [siteKey])
 
   function set(field: keyof FormData, value: string) {
     setForm(f => ({ ...f, [field]: value }))
     setErrors(e => ({ ...e, [field]: '' }))
+  }
+
+  function toggleCategory(cat: ListingCategory) {
+    setForm(f => {
+      const has = f.categories.includes(cat)
+      const next = has ? f.categories.filter(c => c !== cat) : [...f.categories, cat]
+      return { ...f, categories: next }
+    })
+    setErrors(e => ({ ...e, categories: '' }))
   }
 
   function handlePhotos(e: React.ChangeEvent<HTMLInputElement>) {
@@ -67,7 +114,7 @@ export default function PostForm() {
     const errs: typeof errors = {}
     if (photos.length < 2) errs.photos = 'Please upload at least 2 photos'
     if (!form.area) errs.area = 'Required'
-    if (!form.category) errs.category = 'Required'
+    if (form.categories.length === 0) errs.categories = 'Select at least one category'
     if (!form.title.trim()) errs.title = 'Required'
     if (!form.description.trim()) errs.description = 'Required'
     if (form.type === 'sale') {
@@ -105,7 +152,6 @@ export default function PostForm() {
         photoUrls.push(publicUrl)
       }
 
-      // Create listing draft + get Stripe checkout URL
       const res = await fetch('/api/listings/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,18 +159,29 @@ export default function PostForm() {
           ...form,
           price: form.type === 'sale' ? parseFloat(form.price) : null,
           photo_urls: photoUrls,
+          turnstile_token: turnstileTokenRef.current || undefined,
         }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Server error')
 
-      // Redirect to Stripe checkout
-      window.location.href = data.checkoutUrl
+      if (data.free) {
+        router.push(`/post/success?listing_id=${data.listingId}&free=1`)
+      } else {
+        window.location.href = data.checkoutUrl
+      }
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setStep('error')
+      if (siteKey && window.turnstile && turnstileIdRef.current) {
+        window.turnstile.reset(turnstileIdRef.current)
+        turnstileTokenRef.current = ''
+      }
     }
   }
+
+  const currentFee = form.type === 'giveaway' ? giveawayFee : saleFee
+  const feeText = currentFee === 0 ? 'Free to post' : `Listing fee: $${(currentFee / 100).toFixed(0)}`
 
   const inputCls = (field: keyof FormData) =>
     `w-full rounded-xl border text-base px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors ${
@@ -136,7 +193,9 @@ export default function PostForm() {
       <div className="text-center py-16">
         <div className="text-4xl mb-4 animate-bounce">📸</div>
         <p className="font-semibold text-gray-800">Uploading photos and creating your listing…</p>
-        <p className="text-gray-500 text-sm mt-2">You'll be redirected to payment in a moment.</p>
+        <p className="text-gray-500 text-sm mt-2">
+          {currentFee === 0 ? 'Almost done!' : "You'll be redirected to payment in a moment."}
+        </p>
       </div>
     )
   }
@@ -179,8 +238,8 @@ export default function PostForm() {
         </div>
         <div className={`mt-3 text-xs rounded-lg p-2.5 ${form.type === 'giveaway' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>
           {form.type === 'giveaway'
-            ? 'Listing fee: $15 · Item is free for the recipient'
-            : 'Listing fee: $25 · You set the asking price'}
+            ? `${feeText} · Item is free for the recipient`
+            : `${feeText} · You set the asking price`}
         </div>
       </div>
 
@@ -249,36 +308,46 @@ export default function PostForm() {
           {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Area <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={form.area}
-              onChange={e => set('area', e.target.value)}
-              className={inputCls('area')}
-            >
-              <option value="">Select area</option>
-              {AREAS.map(a => <option key={a} value={a}>{a}</option>)}
-            </select>
-            {errors.area && <p className="text-red-500 text-xs mt-1">{errors.area}</p>}
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Area <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={form.area}
+            onChange={e => set('area', e.target.value)}
+            className={inputCls('area')}
+          >
+            <option value="">Select area</option>
+            {AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+          </select>
+          {errors.area && <p className="text-red-500 text-xs mt-1">{errors.area}</p>}
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Category <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={form.category}
-              onChange={e => set('category', e.target.value)}
-              className={inputCls('category')}
-            >
-              <option value="">Select</option>
-              {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-            </select>
-            {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            Category <span className="text-red-500">*</span>
+            <span className="ml-1 text-xs font-normal text-gray-400">(select all that apply)</span>
+          </label>
+          <div className={`rounded-xl border p-3 flex flex-wrap gap-2 ${errors.categories ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'}`}>
+            {CATEGORIES.map(c => {
+              const selected = form.categories.includes(c.value)
+              return (
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => toggleCategory(c.value)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
+                    selected
+                      ? 'bg-emerald-600 text-white border-emerald-600'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-400'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              )
+            })}
           </div>
+          {errors.categories && <p className="text-red-500 text-xs mt-1">{errors.categories}</p>}
         </div>
 
         {form.type === 'sale' && (
@@ -383,20 +452,24 @@ export default function PostForm() {
       {/* Disclaimer */}
       <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-800">
         <p className="font-semibold mb-1">⚠️ Important reminder</p>
-        <p>Please take your listing down once the item is no longer available. You can do this using your PIN code, which will be emailed to you after payment.</p>
+        <p>Please take your listing down once the item is no longer available. You can do this using your PIN code, which will be emailed to you.</p>
       </div>
+
+      {/* Turnstile */}
+      {siteKey && <div ref={turnstileRef} className="flex justify-center" />}
 
       {/* Submit */}
       <button
         type="submit"
         className="w-full bg-emerald-600 text-white font-semibold text-base py-4 rounded-2xl hover:bg-emerald-700 active:scale-98 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-200"
       >
-        Continue to Payment
+        {currentFee === 0 ? 'Post Listing' : 'Continue to Payment'}
         <ChevronRight size={20} />
       </button>
 
       <p className="text-center text-xs text-gray-400">
-        {form.type === 'giveaway' ? 'Listing fee: $15' : 'Listing fee: $25'} · Secure payment via Stripe · Listing active for 30 days
+        {feeText} · Listing active for 30 days
+        {currentFee > 0 && ' · Secure payment via Stripe'}
       </p>
     </form>
   )

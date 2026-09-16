@@ -55,7 +55,9 @@ export default async function AdminPage() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-300">{l.area}</td>
-                <td className="px-4 py-3 text-gray-400">{CATEGORY_LABELS[l.category as keyof typeof CATEGORY_LABELS]}</td>
+                <td className="px-4 py-3 text-gray-400">
+                  {(l.categories?.length ? l.categories : [l.category]).map((c: string) => CATEGORY_LABELS[c as keyof typeof CATEGORY_LABELS]).join(', ')}
+                </td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[l.status] || 'text-gray-400'}`}>
                     {l.status}
