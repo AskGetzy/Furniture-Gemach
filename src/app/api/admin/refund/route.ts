@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 import { cookies } from 'next/headers'
 
 async function checkAdmin() {
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const refund = await stripe.refunds.create({ payment_intent: stripe_payment_intent_id })
+    const refund = await getStripe().refunds.create({ payment_intent: stripe_payment_intent_id })
     const supabase = await createServiceClient()
     await supabase.from('payments').update({
       refunded: true,
