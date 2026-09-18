@@ -3,6 +3,8 @@ import { ArrowRight, Gift, Tag, MapPin, Shield, Camera, Users } from 'lucide-rea
 import AnimateOnScroll from '@/components/AnimateOnScroll'
 import { createClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 async function getActiveCount(): Promise<number> {
   try {
     const supabase = await createClient()

@@ -2,6 +2,8 @@ import { Suspense } from 'react'
 import { Tag } from 'lucide-react'
 import SalesBrowser from './SalesBrowser'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: "Furniture For Sale — Zeh M'zeh",
   description: 'Browse affordable furniture for sale from community members in Monsey, Monroe, Brooklyn, and Lakewood.',
