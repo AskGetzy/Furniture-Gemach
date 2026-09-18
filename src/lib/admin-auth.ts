@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 
-const ADMIN_UID = 'c48c5389-ac26-4ed8-81b5-db2c3b011558'
+const ADMIN_UID = 'ede03dd5-cc7c-4006-9d59-363f2409d9b3'
 
 /**
  * Server-side admin check. Uses auth.getUser() which validates the JWT
