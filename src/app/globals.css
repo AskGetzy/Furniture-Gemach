@@ -40,15 +40,15 @@ h1, h2, h3 {
 }
 
 .animate-fade-slide-up {
-  animation: fadeSlideUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fadeSlideUp 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Scroll-reveal: start hidden, JS adds .in-view to trigger */
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 2.2s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 2.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.in-view {
   opacity: 1;
@@ -57,5 +57,5 @@ h1, h2, h3 {
 
 /* Hover transitions sitewide */
 @theme {
-  --transition-duration-DEFAULT: 350ms;
+  --transition-duration-DEFAULT: 450ms;
 }
