@@ -33,34 +33,23 @@ export default async function HomePage() {
         </div>
 
         <div className="relative max-w-4xl mx-auto text-center">
-          {/* Live activity signal */}
-          {activeCount > 0 && (
-            <div
-              className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium px-3 py-1.5 rounded-full mb-6 animate-fade-slide-up"
-              style={{ animationDelay: '0ms' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              {activeCount} active listing{activeCount !== 1 ? 's' : ''} right now
-            </div>
-          )}
-
           <div
             className="text-5xl md:text-7xl mb-4 md:mb-5 animate-fade-slide-up leading-none"
-            style={{ animationDelay: '60ms' }}
+            style={{ animationDelay: '0ms' }}
           >
             🛋️
           </div>
 
           <h1
             className="text-4xl md:text-6xl font-bold text-gray-900 mb-2 animate-fade-slide-up"
-            style={{ animationDelay: '120ms' }}
+            style={{ animationDelay: '60ms' }}
           >
             Zeh M'zeh
           </h1>
 
           <div
             className="mb-4 animate-fade-slide-up"
-            style={{ animationDelay: '180ms' }}
+            style={{ animationDelay: '120ms' }}
           >
             <span dir="rtl" className="text-3xl md:text-4xl font-bold text-emerald-900 tracking-wide">
               זה מזה
@@ -68,43 +57,16 @@ export default async function HomePage() {
           </div>
 
           <p
-            className="text-lg md:text-xl text-gray-600 mb-3 max-w-2xl mx-auto animate-fade-slide-up"
-            style={{ animationDelay: '240ms' }}
+            className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-slide-up"
+            style={{ animationDelay: '180ms' }}
           >
             A community resource connecting families with furniture they need — free or affordable.
           </p>
 
-          <div
-            className="mb-5 animate-fade-slide-up"
-            style={{ animationDelay: '290ms' }}
-          >
-            <span dir="rtl" className="text-lg md:text-xl text-emerald-900 font-bold">
-              זה נהנה וזה נהנה
-            </span>
-            <span className="text-sm text-gray-500 ml-2 italic">— this one benefits and this one benefits</span>
-          </div>
-
-          {/* Location badges — moved from separate section */}
-          <div
-            className="flex flex-wrap justify-center gap-2 mb-6 animate-fade-slide-up"
-            style={{ animationDelay: '340ms' }}
-          >
-            {['Monsey', 'Monroe', 'Brooklyn', 'Lakewood'].map(area => (
-              <Link
-                key={area}
-                href={`/giveaways?area=${area}`}
-                className="inline-flex items-center gap-1.5 bg-white/80 border border-emerald-200 text-emerald-800 text-xs font-medium px-3 py-1.5 rounded-full hover:border-emerald-400 hover:bg-white hover:shadow-sm transition-all"
-              >
-                <MapPin size={11} />
-                {area}
-              </Link>
-            ))}
-          </div>
-
           {/* CTA buttons */}
           <div
             className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-slide-up"
-            style={{ animationDelay: '390ms' }}
+            style={{ animationDelay: '240ms' }}
           >
             <Link
               href="/giveaways"
@@ -129,10 +91,33 @@ export default async function HomePage() {
             </Link>
           </div>
 
+          {/* Secondary info — subdued, below CTAs */}
+          <div
+            className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 animate-fade-slide-up"
+            style={{ animationDelay: '300ms' }}
+          >
+            {activeCount > 0 && (
+              <span className="flex items-center gap-1 text-xs text-gray-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {activeCount} active listing{activeCount !== 1 ? 's' : ''}
+              </span>
+            )}
+            <span className="text-gray-300 text-xs hidden sm:inline">·</span>
+            {['Monsey', 'Monroe', 'Brooklyn', 'Lakewood'].map((area, i) => (
+              <span key={area} className="flex items-center gap-x-1 text-xs text-gray-400">
+                {i > 0 && <span className="text-gray-300 mr-1">·</span>}
+                <Link href={`/giveaways?area=${area}`} className="hover:text-emerald-600 transition-colors flex items-center gap-0.5">
+                  <MapPin size={10} />
+                  {area}
+                </Link>
+              </span>
+            ))}
+          </div>
+
           {/* Pricing transparency */}
           <p
-            className="mt-3 text-xs text-gray-400 animate-fade-slide-up"
-            style={{ animationDelay: '430ms' }}
+            className="mt-2 text-xs text-gray-400 animate-fade-slide-up"
+            style={{ animationDelay: '340ms' }}
           >
             Free to post giveaways · $10 to post for sale
           </p>
@@ -195,6 +180,13 @@ export default async function HomePage() {
               </AnimateOnScroll>
             ))}
           </div>
+          <AnimateOnScroll delay={200}>
+            <p className="mt-14 text-center text-sm text-gray-500 max-w-lg mx-auto">
+              This is <span className="font-medium text-gray-700">Zeh Nehena V'Zeh Nehena</span> —{' '}
+              <span dir="rtl" className="text-emerald-800 font-medium">זה נהנה וזה נהנה</span>
+              {' '}— this one benefits and this one benefits.
+            </p>
+          </AnimateOnScroll>
         </div>
       </section>
 
