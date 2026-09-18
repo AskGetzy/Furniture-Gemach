@@ -20,6 +20,15 @@ export async function POST(req: Request) {
       posted_at: now.toISOString(),
       expires_at: expiresAt.toISOString(),
     }).eq('id', listing_id)
+  } else if (action === 'activate') {
+    const now = new Date()
+    const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+    await supabase.from('listings').update({
+      status: 'active',
+      expires_at: expiresAt.toISOString(),
+    }).eq('id', listing_id)
+  } else if (action === 'deactivate') {
+    await supabase.from('listings').update({ status: 'archived' }).eq('id', listing_id)
   }
 
   return NextResponse.json({ ok: true })
