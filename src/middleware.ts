@@ -31,19 +31,11 @@ export async function middleware(request: NextRequest) {
   // getUser() validates the JWT server-side and refreshes the session if needed.
   const { data: { user } } = await supabase.auth.getUser()
 
-  const isLoginPage = request.nextUrl.pathname === '/admin/login'
-
-  // Block anyone who isn't the designated admin UID from reaching /admin (except the login page).
-  if (!isLoginPage && user?.id !== ADMIN_UID) {
+  // Block anyone who isn't the designated admin UID.
+  // /admin/login is excluded from this middleware entirely (see matcher).
+  if (user?.id !== ADMIN_UID) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
-    return NextResponse.redirect(url)
-  }
-
-  // If the admin is already logged in and hits /admin/login, redirect to dashboard.
-  if (isLoginPage && user?.id === ADMIN_UID) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/admin'
     return NextResponse.redirect(url)
   }
 
@@ -51,5 +43,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  // Matches /admin and all sub-paths EXCEPT /admin/login (which must be
+  // reachable without a session, otherwise unauthenticated users loop forever).
+  matcher: ['/admin', '/admin/(?!login).*'],
 }
