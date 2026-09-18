@@ -2,6 +2,8 @@ import { Suspense } from 'react'
 import { Gift } from 'lucide-react'
 import GiveawaysBrowser from './GiveawaysBrowser'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: "Free Furniture Giveaways — Zeh M'zeh",
   description: 'Browse free furniture giveaways from community members in Monsey, Monroe, Brooklyn, and Lakewood.',
