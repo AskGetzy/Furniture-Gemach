@@ -43,7 +43,7 @@ h1, h2, h3 {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
+    filter: blur(0px);
   }
 }
 
@@ -64,7 +64,13 @@ h1, h2, h3 {
 .reveal.in-view {
   opacity: 1;
   transform: translateY(0) scale(1);
-  filter: blur(0);
+  filter: blur(0px);
+  /* belt-and-suspenders: remove filter entirely once settled */
+  animation: clearFilter 0s 0.9s forwards;
+}
+
+@keyframes clearFilter {
+  to { filter: none; }
 }
 
 /* Hover transitions sitewide */
