@@ -3,7 +3,12 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const ADMIN_UID = 'a7c4c3aa-c10c-4d52-a12f-11bc3656701a'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  // /admin/login must be reachable without a session — skip auth check for it.
+  if (request.nextUrl.pathname === '/admin/login') {
+    return NextResponse.next({ request })
+  }
+
   // Build a mutable response so Supabase can write refreshed session cookies.
   let supabaseResponse = NextResponse.next({ request })
 
@@ -32,7 +37,6 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Block anyone who isn't the designated admin UID.
-  // /admin/login is excluded from this middleware entirely (see matcher).
   if (user?.id !== ADMIN_UID) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
@@ -43,7 +47,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Matches /admin and all sub-paths EXCEPT /admin/login (which must be
-  // reachable without a session, otherwise unauthenticated users loop forever).
-  matcher: ['/admin', '/admin/(?!login).*'],
+  matcher: ['/admin/:path*'],
 }
