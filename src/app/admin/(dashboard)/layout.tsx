@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { checkAdminSession } from '@/lib/admin-auth'
-import LogoutButton from './LogoutButton'
+import LogoutButton from '../LogoutButton'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const isAdmin = await checkAdminSession()
