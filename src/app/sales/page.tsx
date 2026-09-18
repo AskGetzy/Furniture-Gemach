@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { Tag } from 'lucide-react'
 import SalesBrowser from './SalesBrowser'
 
 export const metadata = {
@@ -8,10 +9,10 @@ export const metadata = {
 
 export default function SalesPage() {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="mb-8">
+    <div className="max-w-6xl mx-auto px-4 py-10">
+      <div className="mb-10">
         <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-3">
-          🏷️ For Sale
+          <Tag size={14} /> For Sale
         </div>
         <h1 className="text-3xl font-bold text-gray-900">Furniture For Sale</h1>
         <p className="text-gray-500 mt-1">Quality furniture at community prices.</p>

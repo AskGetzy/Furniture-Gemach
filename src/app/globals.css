@@ -17,6 +17,16 @@ body {
   color: var(--foreground);
 }
 
+/* Hebrew/Yiddish text uses Rubik */
+[dir="rtl"] {
+  font-family: var(--font-rubik), sans-serif;
+}
+
+/* Tighter heading letter-spacing for a more refined feel */
+h1, h2, h3 {
+  letter-spacing: -0.025em;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

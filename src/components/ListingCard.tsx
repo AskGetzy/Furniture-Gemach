@@ -35,7 +35,7 @@ export default function ListingCard({ listing, showContact = false }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden flex flex-col">
       {/* Photos */}
       <div className="relative h-48 bg-gray-100">
         {listing.photo_urls.length > 0 ? (
@@ -124,7 +124,7 @@ export default function ListingCard({ listing, showContact = false }: Props) {
                 onChange={e => setFlagReason(e.target.value)}
                 className="flex-1 text-xs border border-gray-200 rounded px-2 py-1"
               />
-              <button onClick={handleFlag} className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Send</button>
+              <button onClick={handleFlag} className="text-xs bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-600">Send</button>
               <button onClick={() => setFlagging(false)} className="text-xs text-gray-400 px-1">✕</button>
             </div>
           ) : (

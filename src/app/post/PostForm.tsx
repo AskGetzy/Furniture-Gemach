@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Camera, X, AlertCircle, ChevronRight } from 'lucide-react'
+import { Camera, X, AlertCircle, ChevronRight, Gift, Tag } from 'lucide-react'
 import { AREAS, CATEGORIES } from '@/lib/supabase/types'
 import type { ListingArea, ListingCategory, ListingType } from '@/lib/supabase/types'
 import { createClient } from '@/lib/supabase/client'
@@ -232,7 +232,9 @@ export default function PostForm({ giveawayFee, saleFee }: Props) {
                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-400'
               }`}
             >
-              {t === 'giveaway' ? '🎁 Giveaway (Free)' : '🏷️ For Sale'}
+              <span className="inline-flex items-center gap-1.5">
+                {t === 'giveaway' ? <><Gift size={15} />Giveaway (Free)</> : <><Tag size={15} />For Sale</>}
+              </span>
             </button>
           ))}
         </div>
@@ -451,7 +453,7 @@ export default function PostForm({ giveawayFee, saleFee }: Props) {
 
       {/* Disclaimer */}
       <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-800">
-        <p className="font-semibold mb-1">⚠️ Important reminder</p>
+        <p className="font-semibold mb-1 flex items-center gap-1.5"><AlertCircle size={15} className="text-amber-600" />Important reminder</p>
         <p>Please take your listing down once the item is no longer available. You can do this using your PIN code, which will be emailed to you.</p>
       </div>
 
