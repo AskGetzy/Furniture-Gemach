@@ -10,7 +10,9 @@ export default function Footer() {
             <span className="font-semibold text-gray-800">Zeh M'zeh</span>
           </div>
           <span dir="rtl" className="block text-xs text-emerald-600 font-medium mb-2">זה מזה</span>
-          <p className="text-xs text-gray-500">Community furniture giveaways and sales for Jewish communities.</p>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Connecting Jewish families with furniture they need — free or affordable. This one benefits and this one benefits.
+          </p>
         </div>
         <div>
           <p className="font-semibold text-gray-800 mb-2">Browse</p>
@@ -21,16 +23,16 @@ export default function Footer() {
           </div>
         </div>
         <div>
-          <p className="font-semibold text-gray-800 mb-2">Account</p>
+          <p className="font-semibold text-gray-800 mb-2">Help</p>
           <div className="flex flex-col gap-1">
             <Link href="/manage" className="hover:text-emerald-700">Manage Listing</Link>
+            <Link href="/about" className="hover:text-emerald-700">About Us</Link>
             <Link href="/contact" className="hover:text-emerald-700">Contact Us</Link>
           </div>
         </div>
         <div>
           <p className="font-semibold text-gray-800 mb-2">Legal</p>
           <div className="flex flex-col gap-1">
-            <Link href="/about" className="hover:text-emerald-700">About Us</Link>
             <Link href="/terms" className="hover:text-emerald-700">Terms of Service</Link>
           </div>
         </div>

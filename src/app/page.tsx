@@ -1,12 +1,28 @@
 import Link from 'next/link'
 import { ArrowRight, Gift, Tag, MapPin, Shield, Camera, Users } from 'lucide-react'
 import AnimateOnScroll from '@/components/AnimateOnScroll'
+import { createClient } from '@/lib/supabase/server'
 
-export default function HomePage() {
+async function getActiveCount(): Promise<number> {
+  try {
+    const supabase = await createClient()
+    const { count } = await supabase
+      .from('listings')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'active')
+    return count ?? 0
+  } catch {
+    return 0
+  }
+}
+
+export default async function HomePage() {
+  const activeCount = await getActiveCount()
+
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-white overflow-hidden border-b border-emerald-100 py-24 px-4">
+      <section className="relative bg-white overflow-hidden border-b border-emerald-100 py-14 md:py-24 px-4">
         {/* Gradient mesh blobs */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] rounded-full bg-emerald-100/70 blur-3xl" />
@@ -15,54 +31,82 @@ export default function HomePage() {
         </div>
 
         <div className="relative max-w-4xl mx-auto text-center">
+          {/* Live activity signal */}
+          {activeCount > 0 && (
+            <div
+              className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium px-3 py-1.5 rounded-full mb-6 animate-fade-slide-up"
+              style={{ animationDelay: '0ms' }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {activeCount} active listing{activeCount !== 1 ? 's' : ''} right now
+            </div>
+          )}
+
           <div
-            className="text-7xl mb-5 animate-fade-slide-up leading-none"
-            style={{ animationDelay: '0ms' }}
+            className="text-5xl md:text-7xl mb-4 md:mb-5 animate-fade-slide-up leading-none"
+            style={{ animationDelay: '60ms' }}
           >
             🛋️
           </div>
+
           <h1
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-1 animate-fade-slide-up"
-            style={{ animationDelay: '80ms' }}
+            className="text-4xl md:text-6xl font-bold text-gray-900 mb-2 animate-fade-slide-up"
+            style={{ animationDelay: '120ms' }}
           >
             Zeh M'zeh
           </h1>
+
           <div
-            className="mb-5 animate-fade-slide-up"
-            style={{ animationDelay: '160ms' }}
+            className="mb-4 animate-fade-slide-up"
+            style={{ animationDelay: '180ms' }}
           >
-            <span dir="rtl" className="text-2xl md:text-3xl font-semibold text-emerald-700 tracking-wide">
+            <span dir="rtl" className="text-3xl md:text-4xl font-bold text-emerald-900 tracking-wide">
               זה מזה
             </span>
           </div>
+
           <p
-            className="text-xl text-gray-600 mb-2 max-w-2xl mx-auto animate-fade-slide-up"
+            className="text-lg md:text-xl text-gray-600 mb-3 max-w-2xl mx-auto animate-fade-slide-up"
             style={{ animationDelay: '240ms' }}
           >
             A community resource connecting families with furniture they need — free or affordable.
           </p>
+
           <div
-            className="mb-4 animate-fade-slide-up"
-            style={{ animationDelay: '300ms' }}
+            className="mb-5 animate-fade-slide-up"
+            style={{ animationDelay: '290ms' }}
           >
-            <span dir="rtl" className="text-base text-emerald-600 font-medium italic">
+            <span dir="rtl" className="text-lg md:text-xl text-emerald-900 font-bold">
               זה נהנה וזה נהנה
             </span>
-            <span className="text-sm text-gray-500 ml-2">— this one benefits and this one benefits</span>
+            <span className="text-sm text-gray-500 ml-2 italic">— this one benefits and this one benefits</span>
           </div>
-          <p
-            className="text-gray-500 mb-10 text-sm animate-fade-slide-up"
-            style={{ animationDelay: '360ms' }}
+
+          {/* Location badges — moved from separate section */}
+          <div
+            className="flex flex-wrap justify-center gap-2 mb-6 animate-fade-slide-up"
+            style={{ animationDelay: '340ms' }}
           >
-            Serving Monsey · Monroe · Brooklyn · Lakewood
-          </p>
+            {['Monsey', 'Monroe', 'Brooklyn', 'Lakewood'].map(area => (
+              <Link
+                key={area}
+                href={`/giveaways?area=${area}`}
+                className="inline-flex items-center gap-1.5 bg-white/80 border border-emerald-200 text-emerald-800 text-xs font-medium px-3 py-1.5 rounded-full hover:border-emerald-400 hover:bg-white hover:shadow-sm transition-all"
+              >
+                <MapPin size={11} />
+                {area}
+              </Link>
+            ))}
+          </div>
+
+          {/* CTA buttons */}
           <div
             className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-slide-up"
-            style={{ animationDelay: '420ms' }}
+            style={{ animationDelay: '390ms' }}
           >
             <Link
               href="/giveaways"
-              className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 hover:scale-[1.03] active:scale-[0.98] transition-all shadow-sm"
+              className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 hover:scale-[1.03] active:scale-[0.98] transition-all shadow-sm"
             >
               <Gift size={18} />
               Browse Free Furniture
@@ -70,18 +114,26 @@ export default function HomePage() {
             </Link>
             <Link
               href="/sales"
-              className="inline-flex items-center gap-2 bg-white text-blue-700 border-2 border-blue-200 px-6 py-3 rounded-xl font-semibold hover:border-blue-400 hover:scale-[1.03] active:scale-[0.98] transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 border-2 border-blue-200 px-6 py-3 rounded-xl font-semibold hover:border-blue-400 hover:scale-[1.03] active:scale-[0.98] transition-all"
             >
               <Tag size={18} />
               Browse For-Sale Items
             </Link>
             <Link
               href="/post"
-              className="inline-flex items-center gap-2 bg-white text-gray-700 border-2 border-gray-200 px-6 py-3 rounded-xl font-semibold hover:border-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white text-gray-700 border-2 border-gray-200 px-6 py-3 rounded-xl font-semibold hover:border-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-all"
             >
               Post a Listing
             </Link>
           </div>
+
+          {/* Pricing transparency */}
+          <p
+            className="mt-3 text-xs text-gray-400 animate-fade-slide-up"
+            style={{ animationDelay: '430ms' }}
+          >
+            Free to post giveaways · $10 to post for sale
+          </p>
         </div>
       </section>
 
@@ -126,9 +178,9 @@ export default function HomePage() {
           </AnimateOnScroll>
           <div className="grid md:grid-cols-3 gap-10 text-center">
             {[
-              { Icon: Camera,  bg: 'bg-emerald-100', color: 'text-emerald-700', title: 'Post with photos',       body: 'Upload 2–3 photos, describe your item, and set your price (or mark it free).' },
-              { Icon: MapPin,  bg: 'bg-teal-100',    color: 'text-teal-700',    title: 'Reach your community',  body: 'Listings are filtered by area so neighbors find exactly what they need.' },
-              { Icon: Users,   bg: 'bg-blue-100',    color: 'text-blue-700',    title: 'Connect directly',      body: 'Interested families contact you directly. No middleman, no fees for buyers.' },
+              { Icon: Camera, bg: 'bg-emerald-100', color: 'text-emerald-700', title: 'Post with photos',      body: 'Upload 2–3 photos, describe your item, and set your price (or mark it free).' },
+              { Icon: MapPin, bg: 'bg-teal-100',    color: 'text-teal-700',    title: 'Reach your community', body: 'Listings are filtered by area so neighbors find exactly what they need.' },
+              { Icon: Users,  bg: 'bg-blue-100',    color: 'text-blue-700',    title: 'Connect directly',     body: 'Interested families contact you directly. No middleman, no fees for buyers.' },
             ].map((item, i) => (
               <AnimateOnScroll key={item.title} delay={i * 100}>
                 <div>
@@ -141,26 +193,6 @@ export default function HomePage() {
               </AnimateOnScroll>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Areas */}
-      <section className="max-w-5xl mx-auto px-4 py-20">
-        <AnimateOnScroll>
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-10">Serving these communities</h2>
-        </AnimateOnScroll>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {['Monsey', 'Monroe', 'Brooklyn', 'Lakewood'].map((area, i) => (
-            <AnimateOnScroll key={area} delay={i * 80}>
-              <Link
-                href={`/giveaways?area=${area}`}
-                className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-3 hover:border-emerald-400 hover:shadow-sm hover:scale-[1.03] active:scale-[0.98] transition-all"
-              >
-                <MapPin size={16} className="text-emerald-600" />
-                <span className="font-medium text-gray-700 text-sm">{area}</span>
-              </Link>
-            </AnimateOnScroll>
-          ))}
         </div>
       </section>
 
