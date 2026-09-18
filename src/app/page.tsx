@@ -34,7 +34,7 @@ export default async function HomePage() {
 
         <div className="relative max-w-4xl mx-auto text-center">
           <div
-            className="text-5xl md:text-7xl mb-4 md:mb-5 animate-fade-slide-up leading-none"
+            className="text-5xl md:text-7xl mb-4 md:mb-5 animate-bounce-drop leading-none"
             style={{ animationDelay: '0ms' }}
           >
             🛋️
