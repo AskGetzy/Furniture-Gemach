@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { CATEGORY_LABELS } from '@/lib/supabase/types'
 import { formatDate } from '@/lib/utils'
 import AdminListingActions from './AdminListingActions'
+import AdminPostModal from './AdminPostModal'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Admin — All Listings' }
@@ -25,7 +26,10 @@ export default async function AdminPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-white mb-6">All Listings ({listings?.length || 0})</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold text-white">All Listings ({listings?.length || 0})</h1>
+        <AdminPostModal />
+      </div>
 
       <div className="overflow-x-auto rounded-xl border border-gray-800">
         <table className="w-full text-sm">
@@ -69,7 +73,7 @@ export default async function AdminPage() {
                   <div className="text-gray-500 text-xs">{l.poster_email}</div>
                 </td>
                 <td className="px-4 py-3">
-                  <AdminListingActions listingId={l.id} status={l.status} />
+                  <AdminListingActions listing={l} />
                 </td>
               </tr>
             ))}
