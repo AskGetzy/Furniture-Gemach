@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ADMIN_UID = 'a7c4c3aa-c10c-4d52-a12f-11bc3656701a'
+const ADMIN_UID = 'c48c5389-ac26-4ed8-81b5-db2c3b011558'
 
 export async function proxy(request: NextRequest) {
   // /admin/login must be reachable without a session — skip auth check for it.
