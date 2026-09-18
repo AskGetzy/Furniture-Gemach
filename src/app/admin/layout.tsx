@@ -1,14 +1,11 @@
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { checkAdminSession } from '@/lib/admin-auth'
+import LogoutButton from './LogoutButton'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies()
-  const auth = cookieStore.get('admin_auth')
-
-  if (!auth || auth.value !== process.env.ADMIN_PASSWORD) {
-    redirect('/admin/login')
-  }
+  const isAdmin = await checkAdminSession()
+  if (!isAdmin) redirect('/admin/login')
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
@@ -19,9 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/flags" className="text-sm text-gray-400 hover:text-white transition-colors">Flags</Link>
           <Link href="/admin/payments" className="text-sm text-gray-400 hover:text-white transition-colors">Payments</Link>
         </div>
-        <form action="/api/admin/logout" method="POST">
-          <button className="text-xs text-gray-500 hover:text-gray-300">Logout</button>
-        </form>
+        <LogoutButton />
       </nav>
       <div className="p-6">{children}</div>
     </div>

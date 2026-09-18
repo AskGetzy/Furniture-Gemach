@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
-
-async function checkAdmin() {
-  const cookieStore = await cookies()
-  const auth = cookieStore.get('admin_auth')
-  return auth?.value === process.env.ADMIN_PASSWORD
-}
+import { checkAdminSession } from '@/lib/admin-auth'
 
 export async function POST(req: Request) {
-  if (!await checkAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!await checkAdminSession()) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const { listing_id, action } = await req.json()
   const supabase = await createServiceClient()

@@ -1,15 +1,12 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { getStripe } from '@/lib/stripe'
-import { cookies } from 'next/headers'
-
-async function checkAdmin() {
-  const cookieStore = await cookies()
-  return cookieStore.get('admin_auth')?.value === process.env.ADMIN_PASSWORD
-}
+import { checkAdminSession } from '@/lib/admin-auth'
 
 export async function POST(req: Request) {
-  if (!await checkAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!await checkAdminSession()) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const { payment_id, stripe_payment_intent_id } = await req.json()
   if (!payment_id || !stripe_payment_intent_id) {
