@@ -7,9 +7,9 @@ import Footer from '@/components/Footer'
 const geist = Geist({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Furniture Gemach — Community Furniture Giveaways & Sales',
+  title: "Zeh M'zeh — Community Furniture Giveaways & Sales",
   description: 'Find free and affordable furniture in Monsey, Monroe, Brooklyn, and Lakewood. A community resource for Jewish families.',
-  keywords: 'furniture gemach, free furniture, furniture for sale, Jewish community, Monsey, Monroe, Brooklyn, Lakewood',
+  keywords: "zeh m'zeh, furniture gemach, free furniture, furniture for sale, Jewish community, Monsey, Monroe, Brooklyn, Lakewood",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

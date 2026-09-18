@@ -11,7 +11,10 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-2xl">🛋️</span>
-          <span className="font-bold text-xl text-emerald-700">Furniture Gemach</span>
+          <div className="flex flex-col leading-tight">
+            <span className="font-bold text-lg text-emerald-700">Zeh M'zeh</span>
+            <span dir="rtl" className="text-xs text-emerald-600 font-medium tracking-wide">זה מזה</span>
+          </div>
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -22,7 +25,7 @@ export default function Navbar() {
           <Link href="/contact" className="text-gray-600 hover:text-emerald-700 transition-colors">Contact</Link>
           <Link
             href="/post"
-            className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
+            className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 hover:scale-[1.03] active:scale-[0.98] transition-all"
           >
             Post a Listing
           </Link>

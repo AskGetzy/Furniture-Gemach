@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   const { data } = await supabase.from('listings').select('title, description').eq('id', id).single()
   if (!data) return { title: 'Listing Not Found' }
   return {
-    title: `${data.title} — Furniture Gemach`,
+    title: `${data.title} — Zeh M'zeh`,
     description: data.description?.slice(0, 160),
   }
 }

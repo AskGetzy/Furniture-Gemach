@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import GiveawaysBrowser from './GiveawaysBrowser'
 
 export const metadata = {
-  title: 'Free Furniture Giveaways — Furniture Gemach',
+  title: "Free Furniture Giveaways — Zeh M'zeh",
   description: 'Browse free furniture giveaways from community members in Monsey, Monroe, Brooklyn, and Lakewood.',
 }
 

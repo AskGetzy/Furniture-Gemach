@@ -79,7 +79,7 @@ export default function ContactForm() {
         {loading ? 'Sending…' : 'Send message'}
       </button>
       <p className="text-xs text-center text-gray-400">
-        This message is sent directly to the Furniture Gemach team from our platform.
+        This message is sent directly to the Zeh M'zeh team from our platform.
       </p>
     </form>
   )

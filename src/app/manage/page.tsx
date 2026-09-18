@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import ManageFlow from './ManageFlow'
 
-export const metadata = { title: 'Manage Your Listing — Furniture Gemach' }
+export const metadata = { title: "Manage Your Listing — Zeh M'zeh" }
 
 export default function ManagePage() {
   return (

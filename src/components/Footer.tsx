@@ -5,10 +5,11 @@ export default function Footer() {
     <footer className="bg-gray-50 border-t border-gray-200 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-600">
         <div>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">🛋️</span>
-            <span className="font-semibold text-gray-800">Furniture Gemach</span>
+            <span className="font-semibold text-gray-800">Zeh M'zeh</span>
           </div>
+          <span dir="rtl" className="block text-xs text-emerald-600 font-medium mb-2">זה מזה</span>
           <p className="text-xs text-gray-500">Community furniture giveaways and sales for Jewish communities.</p>
         </div>
         <div>
@@ -35,7 +36,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-200 text-center py-4 text-xs text-gray-400">
-        © {new Date().getFullYear()} Furniture Gemach. All rights reserved.
+        © {new Date().getFullYear()} Zeh M'zeh. All rights reserved.
       </div>
     </footer>
   )

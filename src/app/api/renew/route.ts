@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         currency: 'usd',
         unit_amount: PRICES.renewal,
         product_data: {
-          name: 'Furniture Gemach — Listing Renewal (30 days)',
+          name: "Zeh M'zeh — Listing Renewal (30 days)",
           description: listing.title,
         },
       },

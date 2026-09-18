@@ -2,7 +2,7 @@ import PostForm from './PostForm'
 import { getPrices } from '@/lib/stripe'
 
 export const metadata = {
-  title: 'Post a Listing — Furniture Gemach',
+  title: "Post a Listing — Zeh M'zeh",
   description: 'List your furniture for the community. Giveaways are free to post, sales from $10.',
 }
 

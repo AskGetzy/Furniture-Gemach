@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import SalesBrowser from './SalesBrowser'
 
 export const metadata = {
-  title: 'Furniture For Sale — Furniture Gemach',
+  title: "Furniture For Sale — Zeh M'zeh",
   description: 'Browse affordable furniture for sale from community members in Monsey, Monroe, Brooklyn, and Lakewood.',
 }
 

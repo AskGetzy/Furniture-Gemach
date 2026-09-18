@@ -127,7 +127,7 @@ export async function POST(req: Request) {
           currency: 'usd',
           unit_amount: listingFee,
           product_data: {
-            name: `Furniture Gemach — ${type === 'giveaway' ? 'Giveaway' : 'For Sale'} Listing Fee`,
+            name: `Zeh M'zeh — ${type === 'giveaway' ? 'Giveaway' : 'For Sale'} Listing Fee`,
             description: title,
           },
         },

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
 
-export const metadata = { title: 'Listing Live! — Furniture Gemach' }
+export const metadata = { title: "Listing Live! — Zeh M'zeh" }
 
 export default async function SuccessPage({
   searchParams,
