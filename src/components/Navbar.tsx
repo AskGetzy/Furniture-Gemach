@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
+import SofaMark from './SofaMark'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -22,7 +23,7 @@ export default function Navbar() {
     }`}>
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-4xl leading-none">🛋️</span>
+          <SofaMark size={40} strokeWidth={5} />
           <div className="flex flex-col leading-tight">
             <span className="font-bold text-lg text-emerald-700">Zeh M'zeh</span>
             <span dir="rtl" className="text-xs text-emerald-600 font-medium tracking-wide">זה מזה</span>
