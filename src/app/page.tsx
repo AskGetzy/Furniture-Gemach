@@ -33,23 +33,16 @@ export default async function HomePage() {
         </div>
 
         <div className="relative max-w-4xl mx-auto text-center">
-          <div
-            className="text-5xl md:text-7xl mb-4 md:mb-5 animate-bounce-drop leading-none"
-            style={{ animationDelay: '0ms' }}
-          >
-            🛋️
-          </div>
-
           <h1
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-2 animate-fade-slide-up"
-            style={{ animationDelay: '60ms' }}
+            className="text-4xl md:text-6xl font-bold text-gray-900 mb-2 animate-bounce-drop"
+            style={{ animationDelay: '0ms' }}
           >
             Zeh M'zeh
           </h1>
 
           <div
             className="mb-4 animate-fade-slide-up"
-            style={{ animationDelay: '120ms' }}
+            style={{ animationDelay: '100ms' }}
           >
             <span dir="rtl" className="text-3xl md:text-4xl font-bold text-emerald-900 tracking-wide">
               זה מזה
