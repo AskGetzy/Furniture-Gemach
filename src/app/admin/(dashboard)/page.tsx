@@ -23,6 +23,7 @@ export default async function AdminPage() {
     expired: 'bg-gray-800 text-gray-400',
     archived: 'bg-gray-800 text-gray-500',
     removed: 'bg-red-900/40 text-red-400',
+    taken: 'bg-purple-900/40 text-purple-300',
   }
 
   return (

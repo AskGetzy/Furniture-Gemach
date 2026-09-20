@@ -1,7 +1,7 @@
 export type ListingType = 'giveaway' | 'sale'
 export type ListingArea = 'Monsey' | 'Monroe' | 'Brooklyn' | 'Lakewood'
 export type ListingCategory = 'dining_room' | 'kitchen' | 'bedroom' | 'sofas' | 'other'
-export type ListingStatus = 'pending_payment' | 'active' | 'expired' | 'archived' | 'removed'
+export type ListingStatus = 'pending_payment' | 'active' | 'expired' | 'archived' | 'removed' | 'taken'
 
 export interface Listing {
   id: string

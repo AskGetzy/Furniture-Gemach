@@ -116,6 +116,32 @@ export async function sendAvailabilityCheck(params: {
   })
 }
 
+export async function sendAdminListingRequest(params: {
+  listingId: string
+  listingTitle: string
+  posterName: string
+  posterEmail: string
+  requestType: 'removal' | 'change'
+  message: string
+}) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const typeLabel = params.requestType === 'removal' ? 'Removal Request' : 'Change Request'
+  await getResend().emails.send({
+    from: FROM,
+    to: ADMIN_EMAIL,
+    replyTo: params.posterEmail,
+    subject: `Listing ${typeLabel}: ${params.listingTitle}`,
+    html: `
+      <h2>Listing ${typeLabel} — Zeh M'zeh</h2>
+      <p><strong>Listing:</strong> ${params.listingTitle}</p>
+      <p><strong>Submitted by:</strong> ${params.posterName} (${params.posterEmail})</p>
+      <p><strong>Message:</strong></p>
+      <p>${params.message.replace(/\n/g, '<br />')}</p>
+      <p><a href="${appUrl}/admin">View in admin dashboard</a></p>
+    `,
+  })
+}
+
 export async function sendContactEmail(params: {
   name: string
   email: string
