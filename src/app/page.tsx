@@ -53,7 +53,7 @@ export default async function HomePage() {
             className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-slide-up"
             style={{ animationDelay: '180ms' }}
           >
-            A community resource connecting families with furniture they need — free or affordable.
+            A used furniture giveaway site for the community.
           </p>
 
           {/* CTA buttons */}
