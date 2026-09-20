@@ -5,7 +5,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generatePinCode(): string {
-  return Math.random().toString(36).substring(2, 8).toUpperCase()
+  // Unambiguous chars (no 0/O, 1/I). 32 chars → 256 % 32 = 0, so no modulo bias.
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  const bytes = new Uint8Array(6)
+  crypto.getRandomValues(bytes)
+  return Array.from(bytes).map(b => chars[b % chars.length]).join('')
 }
 
 export function formatPrice(cents: number): string {
