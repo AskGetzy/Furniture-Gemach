@@ -3,6 +3,7 @@ import { CATEGORY_LABELS } from '@/lib/supabase/types'
 import { formatDate } from '@/lib/utils'
 import AdminListingActions from './AdminListingActions'
 import AdminPostModal from './AdminPostModal'
+import PinCopyButton from './PinCopyButton'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Admin — All Listings' }
@@ -42,6 +43,7 @@ export default async function AdminPage() {
               <th className="px-4 py-3 text-left">Status</th>
               <th className="px-4 py-3 text-left">Posted</th>
               <th className="px-4 py-3 text-left">Poster</th>
+              <th className="px-4 py-3 text-left">PIN</th>
               <th className="px-4 py-3 text-left">Actions</th>
             </tr>
           </thead>
@@ -71,6 +73,12 @@ export default async function AdminPage() {
                 <td className="px-4 py-3">
                   <div className="text-gray-300 text-xs">{l.poster_name}</div>
                   <div className="text-gray-500 text-xs">{l.poster_email}</div>
+                </td>
+                <td className="px-4 py-3">
+                  {l.pin_code
+                    ? <PinCopyButton pin={l.pin_code} />
+                    : <span className="text-gray-700 text-xs">—</span>
+                  }
                 </td>
                 <td className="px-4 py-3">
                   <AdminListingActions listing={l} />
