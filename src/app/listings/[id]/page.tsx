@@ -31,7 +31,7 @@ export default async function ListingPage({ params }: Props) {
     .from('listings')
     .select('*')
     .eq('id', id)
-    .in('status', ['active', 'expired'])
+    .in('status', ['active', 'expired', 'taken'])
     .single()
 
   if (!listing) notFound()
@@ -89,6 +89,12 @@ export default async function ListingPage({ params }: Props) {
             )}
           </div>
 
+          {listing.status === 'taken' && (
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-3 mb-4 text-sm text-gray-700 font-semibold text-center uppercase tracking-wider">
+              This item has been taken
+            </div>
+          )}
+
           {listing.status === 'expired' && (
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-sm text-amber-800">
               This listing has expired. {!isGiveaway && 'The seller may be able to renew it.'}
@@ -108,7 +114,7 @@ export default async function ListingPage({ params }: Props) {
           </div>
 
           {/* Contact */}
-          {listing.status === 'active' && (
+          {listing.status === 'active' && listing.status !== 'taken' && (
             <div className="bg-gray-50 rounded-xl p-4 mb-6">
               <h2 className="font-semibold text-gray-800 mb-3">Contact</h2>
               <p className="text-sm text-gray-600 mb-3">
