@@ -55,6 +55,11 @@ export default function ListingCard({ listing, showContact = false }: Props) {
         }`}>
           {isGiveaway ? 'FREE' : 'For Sale'}
         </div>
+        {listing.status === 'taken' && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="bg-white text-gray-800 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Taken</span>
+          </div>
+        )}
         {listing.photo_urls.length > 1 && (
           <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-1.5 py-0.5 rounded">
             +{listing.photo_urls.length - 1} more
@@ -94,22 +99,24 @@ export default function ListingCard({ listing, showContact = false }: Props) {
         </div>
 
         {/* Contact reveal */}
-        <div className="flex flex-col gap-1.5 border-t border-gray-100 pt-3">
-          <button
-            onClick={() => setRevealPhone(!revealPhone)}
-            className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-emerald-700 transition-colors"
-          >
-            <Phone size={13} />
-            {revealPhone ? listing.poster_phone : 'Show phone number'}
-          </button>
-          <button
-            onClick={() => setRevealEmail(!revealEmail)}
-            className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-emerald-700 transition-colors"
-          >
-            <Mail size={13} />
-            {revealEmail ? listing.poster_email : 'Show email'}
-          </button>
-        </div>
+        {listing.status !== 'taken' && (
+          <div className="flex flex-col gap-1.5 border-t border-gray-100 pt-3">
+            <button
+              onClick={() => setRevealPhone(!revealPhone)}
+              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-emerald-700 transition-colors"
+            >
+              <Phone size={13} />
+              {revealPhone ? listing.poster_phone : 'Show phone number'}
+            </button>
+            <button
+              onClick={() => setRevealEmail(!revealEmail)}
+              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-emerald-700 transition-colors"
+            >
+              <Mail size={13} />
+              {revealEmail ? listing.poster_email : 'Show email'}
+            </button>
+          </div>
+        )}
 
         {/* Flag */}
         <div className="mt-2 pt-2 border-t border-gray-100">

@@ -24,7 +24,7 @@ export default function SalesBrowser() {
       .from('listings')
       .select('*')
       .eq('type', 'sale')
-      .eq('status', 'active')
+      .in('status', ['active', 'taken'])
 
     if (area) query = query.eq('area', area)
     if (category) query = query.overlaps('categories', [category])

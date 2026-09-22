@@ -25,7 +25,7 @@ export default function GiveawaysBrowser() {
       .from('listings')
       .select('*')
       .eq('type', 'giveaway')
-      .eq('status', 'active')
+      .in('status', ['active', 'taken'])
       .order('posted_at', { ascending: false })
 
     if (area) query = query.eq('area', area)
