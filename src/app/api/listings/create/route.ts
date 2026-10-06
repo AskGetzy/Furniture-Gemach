@@ -141,7 +141,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ checkoutUrl: session.url })
   } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
     console.error('Create listing error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: msg || 'Internal server error' }, { status: 500 })
   }
 }
